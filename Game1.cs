@@ -1,4 +1,5 @@
 ﻿
+using System.Windows.Forms;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -15,8 +16,9 @@ public class Game1 : Game
     Texture2D pixel;
 
     SpriteFont fontscore;
-    Rectangle paddleLeft = new Rectangle(10,200,20,100);
-    Rectangle paddleRight = new Rectangle(770,200,20,100);
+   
+   Paddle paddleleft;
+   Paddle paddleright;
 
     ball ball;
 
@@ -46,33 +48,33 @@ public class Game1 : Game
         fontscore = Content.Load<SpriteFont>("score");
 
         ball = new ball(pixel);
+        paddleleft = new Paddle(pixel,new Rectangle(10,200,20,100),Keys.W, Keys.S);
+        paddleright = new Paddle(pixel,new Rectangle(770,200,20,100),Keys.Up, Keys.Down);
     }
 
     protected override void Update(GameTime gameTime)
     {
-        if(GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-            Exit();
+      paddleleft.update();
+      paddleright.update();
 
-        KeyboardState kState = Keyboard.GetState();
-        if(kState.IsKeyDown(Keys.W) && paddleLeft.Y > 0){
-            paddleLeft.Y -=8;
-        }
-
-        if(kState.IsKeyDown(Keys.S) && paddleLeft.Y + paddleLeft.Height < 400){
-            paddleLeft.Y +=8;
-        }
-
-        KeyboardState kstate = Keyboard.GetState();
-        if(kState.IsKeyDown(Keys.W) && paddleRight.Y > 0){
-            paddleRight.Y -=8;
-        }
-
-        if(kState.IsKeyDown(Keys.S) && paddleRight.Y + paddleLeft.Height < 400){
-            paddleRight.Y +=8;
-        }
         ball.Update() ;
+        if(paddleleft.Rectangle.Intersects(ball.Rectangle) ||
+        paddleright.Rectangle.Intersects(ball.Rectangle)){
+                ball.Bounce();
 
-        // TODO: Add your update logic here
+
+        }
+        if(ball.Rectangle.X <=0){
+            ball.Reset();
+            scorerightplayer++;
+        }  
+
+        if(ball.Rectangle.X >=800){
+            ball.Reset();
+            scoreleftplayer++;
+        }  
+
+              // TODO: Add your update logic here
 
         base.Update(gameTime);
     }
@@ -81,7 +83,7 @@ public class Game1 : Game
 
     {
         
-        GraphicsDevice.Clear(Color.CornflowerBlue);
+        GraphicsDevice.Clear(Color.Red);
 
         // TODO: Add your drawing code here
 
@@ -93,9 +95,9 @@ public class Game1 : Game
 
 
 
-        _spriteBatch.Draw(pixel,paddleLeft,Color.HotPink);
-        _spriteBatch.Draw(pixel,paddleRight,Color.HotPink);
-        ball.Draw(_spriteBatch);
+       paddleleft.Draw(_spriteBatch);
+       paddleright.Draw(_spriteBatch);
+       ball.Draw(_spriteBatch);
          _spriteBatch.End();
 
 

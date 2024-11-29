@@ -6,17 +6,21 @@ namespace ping_pong_spel
     public class ball
     {
         private Texture2D texture;
+        private Vector2 position;
         private Rectangle rectangle = new Rectangle(390,230,20,20);
 
         private float velocityX = 1;
         private  float velocityY = 1;
 
         public Rectangle Rectangle{
-            get{return Rectangle;}
+            get{return rectangle;}
         }
 
         public ball(Texture2D t){
              texture = t;
+             position = new Vector2();
+             position.X = rectangle.X;
+             position.Y = rectangle.Y;
 
         }
 
@@ -27,11 +31,21 @@ namespace ping_pong_spel
             velocityY = 2;
             
         }
+
+        public void Bounce(){
+            velocityX *= -1.1f;
+        }
+
         public void Update(){
+            position.X += velocityX;
+            position.Y += velocityY;
+
             rectangle.X += (int)velocityX;
             rectangle.Y += (int)velocityY;
             
-            if(rectangle.Y<=0 || rectangle.Y + rectangle.Height >= 460){} 
+            if(rectangle.Y<=0 || rectangle.Y + rectangle.Height >= 460){
+                velocityY *= -1;
+            } 
         }
 
         public void Draw(SpriteBatch spriteBatch){

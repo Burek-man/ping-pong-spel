@@ -5,8 +5,10 @@
   <Config />
   <SourceFiles>
     <File>C:/Users/Admin/Documents/GitHub/ping-pong-spel/Content/BALL.png</File>
+    <File>C:/Users/Admin/Documents/GitHub/ping-pong-spel/Content/File.spritefont</File>
   </SourceFiles>
   <DestFiles>
     <File xsi:nil="true" />
+    <File>score.spritefont</File>
   </DestFiles>
 </SourceFileCollection>
